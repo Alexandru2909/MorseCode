@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">MorseCode</string>
+    <string name="input_msg">Your message here..</string>
+</resources>
