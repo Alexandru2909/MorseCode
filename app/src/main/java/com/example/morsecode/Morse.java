@@ -19,10 +19,59 @@ public class Morse {
         }
     }
     public String translate(char letter){
-        int ind = letter-'a';
-        return morseCodes[ind];
+        if(letter != ' ') {
+            if (letter < 'a')
+                return morseCodes[letter - 'A']+' ';
+            if (letter != ' ')
+                return morseCodes[letter - 'a']+' ';
+        }
+        return "/";
     }
-    public char translate(String str){
-        return this.dictionary.get(str);
+
+    public String translate(String str){
+        String[] words = str.split("\\s+");
+        String code = "";
+        for (String w : words) {
+            for(int i=0;i<w.length();i++) {
+                code += translate(w.charAt(i));
+            }
+            code += "/";
+        }
+        return code;
+    }
+    public String check(String str){
+        String[] words = str.split("\\s+");
+        String code = "";
+        for (String w : words) {
+            for(int i=0;i<w.length();i++) {
+                if ((w.charAt(i) <= 'z') && (w.charAt(i) >= 'a') || (w.charAt(i) <= 'Z') && (w.charAt(i) >= 'A'))
+                    code += w.charAt(i);
+            }
+            code += " ";
+        }
+        return code;
+    }
+
+    public int[] getTimes(String s){
+        int time;
+        int [] timeVars;
+        timeVars = new int[s.length()];
+        String code;
+        for(int i=0;i<s.length();i++){
+            time = 0;
+            if ((s.charAt(i) <= 'z') && (s.charAt(i) >= 'a') || (s.charAt(i) <= 'Z') && (s.charAt(i) >= 'A') || (s.charAt(i)==' ')) {
+                code = translate(s.charAt(i));
+                for (int j = 0; j < code.length(); j++) {
+                    if (code.charAt(j) == '-' || code.charAt(j) == '/')
+                        time += 800;
+                    else
+                        time += 400;
+                }
+                time += 400;
+            }
+            System.out.println("time:"+time+' '+timeVars[i]);
+            timeVars[i]=time;
+        }
+        return  timeVars;
     }
 }
