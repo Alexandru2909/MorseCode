@@ -22,8 +22,7 @@ public class Morse {
         if(letter != ' ') {
             if (letter < 'a')
                 return morseCodes[letter - 'A']+' ';
-            if (letter != ' ')
-                return morseCodes[letter - 'a']+' ';
+            return morseCodes[letter - 'a']+' ';
         }
         return "/";
     }
@@ -61,16 +60,16 @@ public class Morse {
             time = 0;
             if ((s.charAt(i) <= 'z') && (s.charAt(i) >= 'a') || (s.charAt(i) <= 'Z') && (s.charAt(i) >= 'A') || (s.charAt(i)==' ')) {
                 code = translate(s.charAt(i));
+                System.out.println("Code = |"+code + '|');
                 for (int j = 0; j < code.length(); j++) {
                     if (code.charAt(j) == '-' || code.charAt(j) == '/')
                         time += 800;
                     else
                         time += 400;
                 }
-                time += 400;
             }
-            System.out.println("time:"+time+' '+timeVars[i]);
             timeVars[i]=time;
+            System.out.println("time:"+time+' '+timeVars[i] + " for letter " + s.charAt(i));
         }
         return  timeVars;
     }

@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     Morse morse;
     CameraManager cameraManager;
     TextView letterView,codeView;
+    EditText editText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,27 +31,13 @@ public class MainActivity extends AppCompatActivity {
         letterView = findViewById(R.id.textView);
         codeView = findViewById(R.id.textView2);
         cameraManager = (CameraManager) this.getSystemService(CAMERA_SERVICE);
-
-
-
-        final EditText edittext = (EditText) findViewById(R.id.editText);
-        edittext.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // If the event is a key-down event on the "enter" button
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    // Perform action on key press
-                    showText(edittext.getText().toString());
-                    return true;
-                }
-                return false;
-            }
-        });
-
-
+        editText = (EditText) findViewById(R.id.editText);
 
     }
 
+    public void click(View v){
+        showText(editText.getText().toString());
+    }
 
     private final void clearText(){
         letterView.setText(null);
@@ -58,8 +45,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private final void showLetter(char letter){
-        letterView.setText(String.valueOf(letter).toUpperCase());
-        codeView.setText(morse.translate(letter));
+        if (letter != '/' && letter!=' ') {
+            letterView.setText(String.valueOf(letter).toUpperCase());
+            codeView.setText(morse.translate(letter));
+        }
     }
 
     private void showText(String txt){
@@ -79,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             public void run(){
                 if(i<t.length()){
                     showLetter(t.charAt(i));
-                    h1.postDelayed(this,times[i]-400);
+                    h1.postDelayed(this,times[i]);
                     i++;
                 }
             }
