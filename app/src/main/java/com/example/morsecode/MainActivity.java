@@ -1,21 +1,17 @@
 package com.example.morsecode;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraManager;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.security.Key;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     Morse morse;
@@ -32,7 +28,16 @@ public class MainActivity extends AppCompatActivity {
         codeView = findViewById(R.id.textView2);
         cameraManager = (CameraManager) this.getSystemService(CAMERA_SERVICE);
         editText = (EditText) findViewById(R.id.editText);
-
+        Button smsButton = findViewById(R.id.button3);
+        smsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("sms:"));
+                intent.putExtra("sms_body", "Hey, put this text into MorseCode app:\n"+morse.translate(editText.getText().toString()));
+                startActivity(intent);
+            }
+        });
     }
 
     public void click(View v){
@@ -42,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
     private final void clearText(){
         letterView.setText(null);
         codeView.setText(null);
+    }
+
+    public void display(View v){
+        Intent intent = new Intent(this,Display.class);
+        startActivity(intent);
     }
 
     private final void showLetter(char letter){
@@ -105,19 +115,19 @@ public class MainActivity extends AppCompatActivity {
                         switch (code.charAt(i)) {
                             case '-':
                                 cameraManager.setTorchMode(cameraManager.getCameraIdList()[0], true);
-                                sleep=800;
+                                sleep=1000;
                                 break;
                             case '.':
                                 cameraManager.setTorchMode(cameraManager.getCameraIdList()[0], true);
-                                sleep=400;
+                                sleep=500;
                                 break;
                             case '/':
                                 cameraManager.setTorchMode(cameraManager.getCameraIdList()[0], false);
-                                sleep=800;
+                                sleep=1000;
                                 break;
                             default:
                                 cameraManager.setTorchMode(cameraManager.getCameraIdList()[0], false);
-                                sleep=400;
+                                sleep=500;
                                 break;
                         }
                     }
@@ -131,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         h1.post(r1);
-        h2.postDelayed(r2,times[0]-400);
+        h2.postDelayed(r2,times[0]-500);
         h3.post(r3);
 
 

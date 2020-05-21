@@ -11,7 +11,7 @@ public class Morse {
             "-.--", "--.."};
     Morse(){
         System.out.print("HA");
-        Character letter = 'a';
+        Character letter = 'A';
         this.dictionary = new HashMap<String,Character>();
         for(int i =0;i<morseCodes.length;i++){
             this.dictionary.put(morseCodes[i],letter);
@@ -25,6 +25,13 @@ public class Morse {
             return morseCodes[letter - 'a']+' ';
         }
         return "/";
+    }
+
+    public char fromMorse(String s){
+        if (s.equals("/")){
+            return ' ';
+        }
+        return dictionary.get(s);
     }
 
     public String translate(String str){
@@ -63,9 +70,9 @@ public class Morse {
                 System.out.println("Code = |"+code + '|');
                 for (int j = 0; j < code.length(); j++) {
                     if (code.charAt(j) == '-' || code.charAt(j) == '/')
-                        time += 800;
+                        time += 1000;
                     else
-                        time += 400;
+                        time += 500;
                 }
             }
             timeVars[i]=time;
