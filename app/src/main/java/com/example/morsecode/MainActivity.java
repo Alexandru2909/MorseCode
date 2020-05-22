@@ -18,11 +18,12 @@ public class MainActivity extends AppCompatActivity {
     CameraManager cameraManager;
     TextView letterView,codeView;
     EditText editText;
+    int unit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        System.out.println("LOL");
+        unit = 300;
         morse = new Morse();
         letterView = findViewById(R.id.textView);
         codeView = findViewById(R.id.textView2);
@@ -69,9 +70,25 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("Time for "+ i + " is "+times[i]);
         System.out.println("Text = "+t);
         System.out.println("morse="+code);
+        int timeInit;
+        switch (code.charAt(0)) {
+            case '-':
+                timeInit=3*unit;
+                break;
+            case '.':
+                timeInit=unit;
+                break;
+            case ' ':
+                timeInit = unit;
+                break;
+            default:
+                timeInit = 3*unit;
+                break;
+        }
         final Handler h1 = new Handler();
         final Handler h2 = new Handler();
         final Handler h3 = new Handler();
+        final Handler h4 = new Handler();
         Runnable r1 = new Runnable() {
             int i=0;
             @Override
@@ -89,12 +106,46 @@ public class MainActivity extends AppCompatActivity {
             public void run(){
                 if(i<t.length()){
                     clearText();
-                    try {
+                    h2.postDelayed(this,times[i]);
+                    i++;
+                }
+            }
+        };
+        Runnable r4 = new Runnable() {
+            int i=1;
+            int sleep = 0;
+
+            @Override
+            public void run(){
+                if(i<code.length()){
+                    try{
                         cameraManager.setTorchMode(cameraManager.getCameraIdList()[0], false);
-                    } catch (CameraAccessException e) {
+                    }
+                    catch (Exception e){
                         e.printStackTrace();
                     }
-                    h2.postDelayed(this,times[i]);
+                    try {
+
+                        switch (code.charAt(i)) {
+                            case '-':
+                                sleep=4*unit;
+                                break;
+                            case '.':
+                                sleep=2*unit;
+                                break;
+                            case ' ':
+//                                sleep = 3*unit;
+                                sleep = 2*unit;
+                                break;
+                            default:
+                                sleep = 4*unit;
+                                break;
+                        }
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    h4.postDelayed(this,sleep);
                     i++;
                 }
             }
@@ -105,29 +156,23 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void run(){
-                try {
-                    cameraManager.setTorchMode(cameraManager.getCameraIdList()[0], false);
-                } catch (CameraAccessException e) {
-                    e.printStackTrace();
-                }
                 if(i<code.length()){
                     try {
                         switch (code.charAt(i)) {
                             case '-':
                                 cameraManager.setTorchMode(cameraManager.getCameraIdList()[0], true);
-                                sleep=1000;
+                                sleep=4*unit;
                                 break;
                             case '.':
                                 cameraManager.setTorchMode(cameraManager.getCameraIdList()[0], true);
-                                sleep=500;
+                                sleep=2*unit;
+                                break;
+                            case ' ':
+//                                sleep = 3*unit;
+                                sleep = 2*unit;
                                 break;
                             case '/':
-                                cameraManager.setTorchMode(cameraManager.getCameraIdList()[0], false);
-                                sleep=1000;
-                                break;
-                            default:
-                                cameraManager.setTorchMode(cameraManager.getCameraIdList()[0], false);
-                                sleep=500;
+                                sleep = 4*unit;
                                 break;
                         }
                     }
@@ -140,10 +185,11 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        h1.post(r1);
-        h2.postDelayed(r2,times[0]-500);
-        h3.post(r3);
 
+        h1.post(r1);
+        h2.postDelayed(r2,times[0]-3*unit);
+        h3.post(r3);
+        h4.postDelayed(r4,timeInit);
 
     }
 }
