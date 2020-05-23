@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">MorseCode</string>
     <string name="input_msg">Your message here..</string>
-    <string name= "translate">Translate </string>
+    <string name="translate">Translate </string>
     <string name="decr">Decrypt message</string>
-    <string name = "sms"> Send via SMS</string>
+    <string name="sms"> Send via SMS</string>
     <string name="decr2">Decrypt</string>
     <string name="paste_here">Paste the received code here..</string>
+    <string name="check_alpha">Morse\n alphabet</string>
 </resources>

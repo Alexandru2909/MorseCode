@@ -9,8 +9,9 @@ public class Morse {
             "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.",
             "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-",
             "-.--", "--.."};
+    private int unit;
     Morse(){
-        System.out.print("HA");
+        unit = 300;
         Character letter = 'A';
         this.dictionary = new HashMap<String,Character>();
         for(int i =0;i<morseCodes.length;i++){
@@ -24,13 +25,14 @@ public class Morse {
                 return morseCodes[letter - 'A']+' ';
             return morseCodes[letter - 'a']+' ';
         }
-        return "/";
+        return "/ ";
     }
 
     public char fromMorse(String s){
         if (s.equals("/")){
             return ' ';
         }
+        System.out.println("Trying to translate "+s);
         return dictionary.get(s);
     }
 
@@ -41,7 +43,7 @@ public class Morse {
             for(int i=0;i<w.length();i++) {
                 code += translate(w.charAt(i));
             }
-            code += "/";
+            code += "/ ";
         }
         return code;
     }
@@ -67,16 +69,24 @@ public class Morse {
             time = 0;
             if ((s.charAt(i) <= 'z') && (s.charAt(i) >= 'a') || (s.charAt(i) <= 'Z') && (s.charAt(i) >= 'A') || (s.charAt(i)==' ')) {
                 code = translate(s.charAt(i));
-                System.out.println("Code = |"+code + '|');
                 for (int j = 0; j < code.length(); j++) {
-                    if (code.charAt(j) == '-' || code.charAt(j) == '/')
-                        time += 1000;
-                    else
-                        time += 500;
+                    switch(code.charAt(j)){
+                        case '.':
+                            time+=2*unit;
+                            break;
+                        case '-':
+                            time += 4*unit;
+                            break;
+                        case '/':
+                            time+=2*unit;
+                            break;
+                        default:
+                            time+= 2*unit;
+                    }
                 }
+//            System.out.println("time:"+time+ " for letter " + s.charAt(i) + " with code= "+code);
             }
             timeVars[i]=time;
-            System.out.println("time:"+time+' '+timeVars[i] + " for letter " + s.charAt(i));
         }
         return  timeVars;
     }

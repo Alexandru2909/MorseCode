@@ -48,7 +48,6 @@ public class Display extends AppCompatActivity {
         String[] letters = x.split(" ");
         String word = "";
         for(int i=0;i<letters.length;i++){
-
             word+=m.fromMorse(letters[i]);
         }
         output.setText(word);
