@@ -5,25 +5,34 @@ import java.util.HashMap;
 
 public class Morse {
     private HashMap<String,Character> dictionary;
-    private String [] morseCodes= {".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....",
+    private String [] morseCodeLetter= {".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....",
             "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.",
             "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-",
             "-.--", "--.."};
+    private String [] morseCodeDigits= {"-----",".----","..---","...--","....-",".....",
+    "-....","--...","---..","----."};
     private int unit;
     Morse(){
         unit = 300;
         Character letter = 'A';
         this.dictionary = new HashMap<String,Character>();
-        for(int i =0;i<morseCodes.length;i++){
-            this.dictionary.put(morseCodes[i],letter);
+        for(int i =0;i<morseCodeLetter.length;i++){
+            this.dictionary.put(morseCodeLetter[i],letter);
+            letter++;
+        }
+        letter = '0';
+        for(int i =0;i<morseCodeDigits.length;i++){
+            this.dictionary.put(morseCodeDigits[i],letter);
             letter++;
         }
     }
     public String translate(char letter){
         if(letter != ' ') {
+            if (letter<'A')
+                return morseCodeDigits[letter - '0']+' ';
             if (letter < 'a')
-                return morseCodes[letter - 'A']+' ';
-            return morseCodes[letter - 'a']+' ';
+                return morseCodeLetter[letter - 'A']+' ';
+            return morseCodeLetter[letter - 'a']+' ';
         }
         return "/ ";
     }
@@ -52,7 +61,7 @@ public class Morse {
         String code = "";
         for (String w : words) {
             for(int i=0;i<w.length();i++) {
-                if ((w.charAt(i) <= 'z') && (w.charAt(i) >= 'a') || (w.charAt(i) <= 'Z') && (w.charAt(i) >= 'A'))
+                if ((w.charAt(i) <= 'z') && (w.charAt(i) >= 'a') || (w.charAt(i) <= 'Z') && (w.charAt(i) >= 'A') || (w.charAt(i) <= '9') && (w.charAt(i) >= '0'))
                     code += w.charAt(i);
             }
             code += " ";
@@ -67,7 +76,7 @@ public class Morse {
         String code;
         for(int i=0;i<s.length();i++){
             time = 0;
-            if ((s.charAt(i) <= 'z') && (s.charAt(i) >= 'a') || (s.charAt(i) <= 'Z') && (s.charAt(i) >= 'A') || (s.charAt(i)==' ')) {
+            if ((s.charAt(i) <= 'z') && (s.charAt(i) >= 'a') || (s.charAt(i) <= 'Z') && (s.charAt(i) >= 'A') || (s.charAt(i)==' ') || (s.charAt(i) <= '9') && (s.charAt(i) >= '0')) {
                 code = translate(s.charAt(i));
                 for (int j = 0; j < code.length(); j++) {
                     switch(code.charAt(j)){
